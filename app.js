@@ -2,6 +2,11 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
+
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+
+
 //Set up default mongoose connection
 var mongoDB = 'mongodb://127.0.0.1/mama_sauce';
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true});
@@ -13,14 +18,12 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 
-var dishRouter = require("./routers/dishRouter") 
+var foodRouter = require("./routers/foodRouter") 
 
 
-app.use("/", dishRouter)
+app.use("/foods", foodRouter)
 
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{
     console.log("Server running or port ", PORT)
 })
-
-
