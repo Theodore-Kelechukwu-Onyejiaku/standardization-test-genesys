@@ -1,6 +1,8 @@
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
+require("dotenv").config();
+
 
 
 app.use(express.json());
@@ -8,7 +10,7 @@ app.use(express.urlencoded({ extended: false }));
 
 
 //Set up default mongoose connection
-var mongoDB = 'mongodb://127.0.0.1/mama_sauce';
+var mongoDB = process.env.DB_LOCAL;
 mongoose.connect(mongoDB, {useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true});
 
 //Get the default connection

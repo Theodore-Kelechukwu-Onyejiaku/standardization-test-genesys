@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const validation = require("../validation/login_signupValidation")
 
+require("dotenv").config();
 
 exports.getUsers = (req, res, next)=>{
     User.find()
@@ -85,9 +86,15 @@ exports.signin = async (req, res, next)=>{
         }
 
         //Create and assign Token
-        var token = jwt.sign( ordinaryUser, process.env.TOKEN_SECRET,{ expiresIn: '59m' });
+        var token = jwt.sign( user.toJSON(), process.env.TOKEN_SECRET,{ expiresIn: '59m' });
         
-
-
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        
+        res.json({token, message:"logged in"})
     })
 }
+
+/**
+ *      FOR /users/logout
+ */
