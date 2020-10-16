@@ -1,17 +1,52 @@
 const express = require("express");
 const bodyParser = require("body-parser")
-const dishRouter = express.Router();
-const dishController = require("../controllers/foodController");
+const foodRouter = express.Router();
+const foodController = require("../controllers/foodController");
 
-dishRouter.use(bodyParser.json())
+foodRouter.use(bodyParser.json())
 
-dishRouter.route("/")
-.get(dishController.getFoods)
-.post(dishController.createFood)
-.put(dishController.updateAllFoods)
-.delete(dishController.deleteAllFoods)
+/**
+ *      /foods
+ */
+foodRouter.route("/")
+.get(foodController.getFoods)
+.post(foodController.createFood)
+.put(foodController.notAllowed)
+.delete(foodController.deleteAllFoods)
 
-dishRouter
 
 
-module.exports = dishRouter;
+
+/**
+ *       For Single Food
+ *      /foods/<food_id>
+ */
+foodRouter.route("/:food_id")
+.get(foodController.getSingleFood)
+.post(foodController.notAllowed)
+.put(foodController.updateSingleFood)
+.delete(foodController.deleteSingleFood)
+
+
+
+/**
+ *      for comments
+ */
+foodRouter.route("/:food_id/comments")
+.get(foodController.getComments)
+.post(foodController.createComment)
+.put(foodController.notAllowed)
+.delete(foodController.deleteComments)
+
+
+/**
+ *  for Single Comments
+ */
+foodRouter.route("/:food_id/comments/:comment_id")
+.get(foodController.getSingleComment)
+.post(foodController.notAllowed)
+.put(foodController.updateSingleComment)
+.delete(foodController.deleteSingleComment)
+
+
+module.exports = foodRouter;
