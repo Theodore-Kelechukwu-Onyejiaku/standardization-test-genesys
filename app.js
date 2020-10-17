@@ -21,9 +21,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
 var foodRouter = require("./routers/foodRouter") ;
 var userRouter = require("./routers/userRouter");
+var orderRouter = require("./routers/orderRouter")
 
 app.use("/foods", foodRouter);
 app.use("/users", userRouter);
+app.use("/orders", orderRouter);
+
 
 var PORT = process.env.PORT || 3000;
 app.listen(PORT, ()=>{

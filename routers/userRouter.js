@@ -4,22 +4,14 @@ const userController = require("../controllers/userController")
 const verification = require("../validation/validateToken")
 
 
-userRouter.route("/")
-.get( verification.verifyUser, userController.getUsers)
-.post()
-.put()
-.delete()
+userRouter.get("/",verification.verifyUser, verification.verifyAdmin, userController.getUsers);
 
-userRouter.route("/signup")
-.get()
-.post(userController.singup)
-.put()
-.delete()
+userRouter.post("/signup", userController.singup)
 
-userRouter.route("/signin")
-.get()
-.post(userController.signin)
-.put()
-.delete()
+userRouter.post("/signin", userController.signin)
+
+userRouter.get("/logout", userController.logout)
+
+userRouter.get("/my_orders", verification.verifyUser, userController.getMyOrders)
 
 module.exports = userRouter;

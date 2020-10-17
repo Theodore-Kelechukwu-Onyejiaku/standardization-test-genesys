@@ -31,3 +31,12 @@ exports.verifyUser = (req, res, next)=>{
     }
     
 }
+
+exports.verifyAdmin = (req, res, next)=>{
+    if(req.user.admin){
+      return  next()
+    }
+    var err = new Error("You are not authorized!");
+        err.status = 403;
+        next(err);
+}

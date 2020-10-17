@@ -15,26 +15,25 @@ const commentSchema = new Schema({
         type: String,
         required: true
     },
-    author: {
-        type: String,
-        required: true
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User"
     }
 },{
     timestamps: true
 })
 
-const dishSchema = new Schema({
+const foodSchema = new Schema({
     name: {type: String, required: true, unique: true},
     description: {type: String, required: true},
     image: {type: String, required: true},
     category: {type: String, required: true},
     label: {type:String,default: ""},
     price: {type: Currency, required: true, min: 0},
-    quantity: {type: Number, default: 0},
     comments: [ commentSchema ]
 },
 {
     timestamps: true
 })
 
-module.exports = mongoose.model("Dish", dishSchema);
+module.exports = mongoose.model("Food", foodSchema);

@@ -1,0 +1,56 @@
+Arguments: 
+  C:\Users\Theodore K_O\AppData\Local\nvs\node\12.18.3\x64\node.exe C:\Users\Theodore K_O\AppData\Local\nvs\node\12.18.3\x64\node_modules\yarn\bin\yarn.js
+
+PATH: 
+  C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\MongoDB\Server\4.2\bin;C:\Program Files\PuTTY\;C:\Program Files\nodejs\;C:\Program Files;C:\Users\Theodore K_O\.bluemix\tmp\cf_996418695;"C:\Program Files\OpenSSL-Win64\bin;";C:\Users\Theodore K_O\AppData\Local\Programs\Python\Python38-32\Scripts\;C:\Users\Theodore K_O\AppData\Local\Programs\Python\Python38-32\;C:\Users\Theodore K_O\AppData\Local\Microsoft\WindowsApps;C:\Users\Theodore K_O\AppData\Local\Programs\Microsoft VS Code\bin;C:\Users\Theodore K_O\AppData\Local\nvs\;C:\Users\Theodore K_O\AppData\Local\nvs\node\12.18.3\x64;C:\Program Files\heroku\bin;C:\Users\Theodore K_O\AppData\Roaming\npm;C:\Program Files\IBM\Cloud\bin
+
+Yarn version: 
+  1.22.4
+
+Node version: 
+  12.18.3
+
+Platform: 
+  win32 x64
+
+Trace: 
+  Error: getaddrinfo ENOTFOUND registry.yarnpkg.com
+      at GetAddrInfoReqWrap.onlookup [as oncomplete] (dns.js:66:26)
+
+npm manifest: 
+  {
+    "name": "standardization_test",
+    "version": "1.0.0",
+    "description": "This is a standardization test given by Genesys Tech Hub",
+    "main": "app.js",
+    "scripts": {
+      "dev": "nodemon app.js",
+      "start": "node app.js"
+    },
+    "author": "Theodore Kelechukwu Onyejiaku",
+    "license": "ISC",
+    "dependencies": {
+      "@hapi/joi": "^17.1.1",
+      "bcryptjs": "^2.4.3",
+      "body-parser": "^1.19.0",
+      "cookie-parser": "^1.4.5",
+      "cors": "^2.8.5",
+      "dotenv": "^8.2.0",
+      "ejs": "^3.0.1",
+      "express": "^4.17.1",
+      "jsonwebtoken": "^8.5.1",
+      "moment": "^2.25.3",
+      "mongoose": "^5.9.6",
+      "mongoose-currency": "^0.2.0"
+    },
+    "devDependencies": {
+      "handlebars": "^4.7.3",
+      "nodemon": "^2.0.4"
+    }
+  }
+
+yarn manifest: 
+  No manifest
+
+Lockfile: 
+  No lockfile

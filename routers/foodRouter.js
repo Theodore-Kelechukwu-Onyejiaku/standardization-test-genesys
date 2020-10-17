@@ -2,6 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser")
 const foodRouter = express.Router();
 const foodController = require("../controllers/foodController");
+const validation = require("../validation/validateToken");
 
 foodRouter.use(bodyParser.json())
 
@@ -10,22 +11,36 @@ foodRouter.use(bodyParser.json())
  */
 foodRouter.route("/")
 .get(foodController.getFoods)
-.post(foodController.createFood)
+.post(validation.verifyUser, foodController.createFood)
 .put(foodController.notAllowed)
-.delete(foodController.deleteAllFoods)
-
+.delete(validation.verifyUser, validation.verifyAdmin, foodController.deleteAllFoods)
 
 
 
 /**
- *       For Single Food
- *      /foods/<food_id>
+ * @route  /foods/<food_id>
+ * @descr   For Single Food
+ * @access public and private   
  */
 foodRouter.route("/:food_id")
 .get(foodController.getSingleFood)
 .post(foodController.notAllowed)
-.put(foodController.updateSingleFood)
-.delete(foodController.deleteSingleFood)
+.put(validation.verifyUser, validation.verifyAdmin, foodController.updateSingleFood)
+.delete(validation.verifyUser, validation.verifyAdmin, foodController.deleteSingleFood)
+
+
+/**
+ *  @route /foods/<food_id>/order
+ *  @descr for ordering food
+ *  @access private
+ * 
+*/
+foodRouter.route("/:food_id/order")
+.get()
+.post(validation.verifyUser, foodController.orderFood)
+.put()
+.delete()
+
 
 
 
@@ -34,9 +49,9 @@ foodRouter.route("/:food_id")
  */
 foodRouter.route("/:food_id/comments")
 .get(foodController.getComments)
-.post(foodController.createComment)
+.post(validation.verifyUser, foodController.createComment)
 .put(foodController.notAllowed)
-.delete(foodController.deleteComments)
+.delete(validation.verifyUser, validation.verifyAdmin, foodController.deleteComments)
 
 
 /**
@@ -45,8 +60,8 @@ foodRouter.route("/:food_id/comments")
 foodRouter.route("/:food_id/comments/:comment_id")
 .get(foodController.getSingleComment)
 .post(foodController.notAllowed)
-.put(foodController.updateSingleComment)
-.delete(foodController.deleteSingleComment)
+.put(validation.verifyUser, foodController.updateSingleComment)
+.delete(validation.verifyUser, validation.verifyAdmin, foodController.deleteSingleComment)
 
 
 module.exports = foodRouter;

@@ -1,7 +1,9 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const validation = require("../validation/login_signupValidation")
+const validation = require("../validation/login_signupValidation");
+const Order = require("../models/orderModel");
+const Food = require("../models/foodModel")
 
 require("dotenv").config();
 
@@ -51,11 +53,13 @@ exports.singup = async(req, res, next)=>{
         .then(customer =>{
             res.statusCode = 200;
             res.setHeader("Content-Type", "application/json");
-            res.json(customer)
+            res.json({"message":"signup successsful"})
         }, err  => next(err))
     }, err => next(err))
     .catch(err => next(err))
 }
+
+
 
 /**
  *      FOR /users/signin
@@ -98,3 +102,30 @@ exports.signin = async (req, res, next)=>{
 /**
  *      FOR /users/logout
  */
+exports.logout = (req, res, next)=>{
+    var authHeader = req.headers.authorization;
+    if(!authHeader){
+        res.statusCode = 403;
+        var err = new Error("You are not logged in!");
+        return next(err)
+    }
+    req.headers.authorization.split(" ")[1] = ""
+    res.statusCode = 200;
+    res.setHeader("Cotent-Type", "application/json");
+    res.json({"message": "Logout successful!"})
+}
+
+
+/**
+ *      FOR /foods/my_orders
+ */
+exports.getMyOrders = (req, res, next)=>{
+    Order.find({"user": req.user._id})
+    .populate("food")
+    .then(order =>{
+            res.statusCode = 200;
+            res.setHeader("Conten-Type", "application/json");
+            res.json({order})
+    }, err => next(err))
+    .catch(err => next(err))
+}

@@ -1,14 +1,19 @@
 const mongoose = require("mongoose");
 const Food = require("../models/foodModel");
+const User = require("../models/userModel");
+const Order = require("../models/orderModel");
 
-
-/** ALL REQUESTS TO /foods
- * @param {/} req 
- * @param {*} res 
- * @param {*} next 
+ 
+/**
+ * 
+ * @route POST /foods
+ * @descr CRUD all /foods
+ * @access public and private
  */
+
 exports.getFoods = (req, res, next)=>{
     Food.find()
+    .populate("comments.user")
     .then((food) =>{
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
@@ -29,7 +34,7 @@ exports.createFood = (req, res, next)=>{
 
 exports.notAllowed = (req, res, next)=>{
     res.statusCode = 403;
-    res.end("PUT operation not supported on /foods");
+    res.end("Operation not supported");
 }
 
 exports.deleteAllFoods = (req, res, next)=>{
@@ -47,9 +52,9 @@ exports.deleteAllFoods = (req, res, next)=>{
 
 /**
  * 
- * @param {*} req 
- * @param {*} res 
- * @param {*} next 
+ * @route  req /foods/food_id
+ * @descr {*} res 
+ * @access {*} next 
  */
 
  exports.getSingleFood = (req, res, next)=>{
@@ -75,10 +80,10 @@ exports.deleteAllFoods = (req, res, next)=>{
 
 exports.deleteSingleFood = (req, res, next)=>{
     Food.findByIdAndRemove(req.param.food_id)
-    .then(dish =>{
+    .then(food =>{
         res.statusCode = 200;
         res.setHeader("Content-Type", "application/json");
-        res.json(dish);
+        res.json(food);
     }, (err) => next(err))
     .catch(err => next(err));
 }
@@ -90,6 +95,7 @@ exports.deleteSingleFood = (req, res, next)=>{
 
  exports.getComments = (req, res, next)=>{
      Food.findById(req.params.food_id)
+     .populate("comments.user")
      .then(food =>{
         res.statusCode =200;
         res.setHeader("Content-Type", "application/json");
@@ -101,6 +107,7 @@ exports.deleteSingleFood = (req, res, next)=>{
  exports.createComment = (req, res, next)=>{
      Food.findById(req.params.food_id)
      .then(food =>{
+         req.body.user = req.user._id;
          food.comments.push(req.body);
          food.save()
          .then(foodComment =>{
@@ -134,6 +141,7 @@ exports.deleteSingleFood = (req, res, next)=>{
 
 
  /**
+  *  @route /foods/:food_id/comments/:comment_id
   *     FOR SINGLE COMMENTS
   */
 exports.getSingleComment = (req, res, next) =>{
@@ -149,6 +157,17 @@ exports.getSingleComment = (req, res, next) =>{
 exports.updateSingleComment = (req, res, next) =>{
     Food.findById(req.params.food_id)
     .then(food =>{
+        let userId = req.user._id;
+        let commentId = food.comments.id(req.params.comment_id).user;
+        console.log(userId, commentId)
+
+        if(!(userId == commentId)){
+            console.log("This is not the user!")
+            var err = new Error("You are not allowed to update a comment that is not yours!")
+            err.statusCode = 403;
+
+            return next(err)
+        }
         if(req.body.rating){
             food.comments.id(req.params.comment_id).rating = req.body.rating;
         }
@@ -168,6 +187,17 @@ exports.updateSingleComment = (req, res, next) =>{
 exports.deleteSingleComment = (req, res, next)=>{
     Food.findById(req.params.food_id)
     .then(food =>{
+        let userId = req.user._id;
+        let commentId = food.comments.id(req.params.comment_id).user;
+        console.log(userId, commentId)
+
+        if(!(userId == commentId)){
+            console.log("This is not the user!")
+            var err = new Error("You are not allowed to delete a comment that is not yours!")
+            err.statusCode = 403;
+
+            return next(err)
+        }
         food.comments.id(req.params.comment_id).remove()
         food.save()
         .then(newFoodInfo => {
@@ -175,6 +205,23 @@ exports.deleteSingleComment = (req, res, next)=>{
             res.setHeader("Content-Type", "application/json");
             res.json(newFoodInfo.comments)
         }, err => next(err))
+    }, err => next(err))
+    .catch(err => next(err))
+}
+
+
+/**
+ *      FOR ORDERS
+ */
+exports.orderFood = (req, res, next)=>{
+    req.body.user = req.user._id;
+    req.body.food = req.params.food_id;
+    //Food.findById(req.params.food_id)
+    Order.create(req.body)
+    .then(order =>{
+        res.statusCode = 200;
+        res.setHeader("Content-Type", "application/json");
+        res.json(order)
     }, err => next(err))
     .catch(err => next(err))
 }
