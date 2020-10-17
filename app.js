@@ -22,10 +22,12 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var foodRouter = require("./routers/foodRouter") ;
 var userRouter = require("./routers/userRouter");
 var orderRouter = require("./routers/orderRouter")
+var uploadRouter = require("./routers/uploadRouter")
 
 app.use("/foods", foodRouter);
 app.use("/users", userRouter);
 app.use("/orders", orderRouter);
+app.use("/imageUpload", uploadRouter)
 
 
 var PORT = process.env.PORT || 3000;
